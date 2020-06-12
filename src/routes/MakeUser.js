@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import { MAKE_USER } from "../graphqls/Queries";
 import { Typography } from "@material-ui/core";
+import { resolveFieldValueOrError } from "graphql/execution/execute";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -15,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	item: {
 		display: "flex",
-		"align-items": "center",
 		"& > *": {
 			margin: theme.spacing(1),
 		},
@@ -25,19 +25,29 @@ const useStyles = makeStyles((theme) => ({
 		height: theme.spacing(7),
 	},
 	active: {
-		width: theme.spacing(8),
-		height: theme.spacing(8),
-		border: "1px solid black;",
+		animation: "$scale 0.5s forwards",
+		border: `2px solid ${theme.palette.primary.light};`,
+	},
+	"@keyframes scale": {
+		"0%": {
+			transform: "scale(1)",
+		},
+		"100%": {
+			transform: "scale(1.2)",
+		},
 	},
 }));
 
 const MakeUser = ({ history }) => {
-	const avatarArr = ["/images/avatar1.jpg", "/images/avatar2.jpg", "/images/avatar3.jpg", "/images/avatar4.jpg", "/images/avatar5.jpg"];
+	const avatarArr = ["/images/avatar1.png", "/images/avatar2.png", "/images/avatar3.png", "/images/avatar4.png", "/images/avatar5.png"];
 
 	const [avatar, setAvatar] = useState({ avatarUrl: avatarArr[0], nickName: "" });
+	const [isError, setIsError] = useState(false);
+	const [helperText, setHelperText] = useState("");
 	const classes = useStyles();
 
 	const client = useApolloClient();
+
 	const [makeUser] = useMutation(MAKE_USER, {
 		onCompleted: ({ makeUser }) => {
 			const loginUser = makeUser;
@@ -52,10 +62,24 @@ const MakeUser = ({ history }) => {
 		setAvatar({ avatarUrl: url, nickName: avatar.nickName });
 	};
 
+	const checkValidation = () => {
+		let result = false;
+		if (avatar.nickName === "") {
+			setIsError(true);
+			setHelperText("Required value");
+		} else {
+			setIsError(false);
+			setHelperText("");
+			result = true;
+		}
+		return result;
+	};
 	const handleConfirm = () => {
-		makeUser({
-			variables: { ...avatar },
-		});
+		if (checkValidation()) {
+			makeUser({
+				variables: { ...avatar },
+			});
+		}
 	};
 
 	return (
@@ -79,9 +103,16 @@ const MakeUser = ({ history }) => {
 								variant='outlined'
 								color='primary'
 								size='small'
-								onChange={(e) => setAvatar({ ...avatar, nickName: e.target.value })}
+								error={isError}
+								helperText={helperText}
+								onChange={(e) => {
+									setAvatar({ ...avatar, nickName: e.target.value });
+								}}
+								onKeyUp={checkValidation}
 								onKeyPress={(e) => {
-									if (e.key === "Enter") handleConfirm();
+									if (e.key === "Enter") {
+										handleConfirm();
+									}
 								}}
 							/>
 							<Button variant='outlined' color='primary' onClick={handleConfirm}>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { GET_CHATTING, NEW_CHAT_SUBSCRIPTION } from "../graphqls/Queries";
 
-import { Paper } from "@material-ui/core";
+import { Paper, Backdrop, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Input from "./Input";
 import SpeachBalloon from "./SpeechBalloon";
@@ -10,6 +10,10 @@ import SpeachBalloon from "./SpeechBalloon";
 const useStyles = makeStyles((theme) => ({
 	paper: {
 		paddingBottom: 50 + theme.spacing(2),
+	},
+	backdrop: {
+		zIndex: theme.zIndex.drawer + 1,
+		color: "#fff",
 	},
 }));
 
@@ -38,7 +42,11 @@ export default () => {
 	});
 
 	if (loading) {
-		return "Loading...";
+		return (
+			<Backdrop className={classes.backdrop} open={loading}>
+				<CircularProgress color='inherit' />
+			</Backdrop>
+		);
 	} else {
 		return (
 			<div>

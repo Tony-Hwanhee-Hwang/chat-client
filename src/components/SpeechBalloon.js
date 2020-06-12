@@ -54,7 +54,7 @@ export default ({ chat, side }) => {
 			<Grid container justify={side === "right" ? "flex-end" : "flex-start"} className={classes.root}>
 				{side !== "right" && (
 					<Grid item className={classes.root}>
-						<Avatar src={chat.sender.avatarUrl}></Avatar>
+						<Avatar alt={chat.sender.nickName} src={chat.sender.avatarUrl}></Avatar>
 					</Grid>
 				)}
 				<Grid item xs={8}>

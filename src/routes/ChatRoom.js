@@ -6,6 +6,7 @@ import { GET_USER } from "../graphqls/Queries";
 const ChatRoom = ({ history }) => {
 	useQuery(GET_USER, {
 		onCompleted: ({ isLoggedIn }) => {
+			//console.log(result);
 			if (!isLoggedIn) history.push("/MakeUser");
 		},
 	});

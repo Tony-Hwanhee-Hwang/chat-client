@@ -7,10 +7,5 @@ export const defaults = {
 		avatarUrl: "",
 	},
 };
-export const resolvers = {
-	Mutation: {
-		loginState: (_, variables, { cache }) => {
-			cache.writeData({ data: { isLoggedIn: true } });
-		},
-	},
-};
+
+export const resolvers = {};
