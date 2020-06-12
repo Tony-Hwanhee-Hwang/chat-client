@@ -16,12 +16,18 @@ export const GET_CHATTING = gql`
 		chatting {
 			id
 			sender {
+				id
 				nickName
 				avatarUrl
 			}
 			message
 			date
 			isRead
+		}
+		loginUser @client {
+			id
+			nickName
+			avatarUrl
 		}
 	}
 `;
@@ -31,6 +37,7 @@ export const NEW_CHAT_SUBSCRIPTION = gql`
 		newChat {
 			id
 			sender {
+				id
 				nickName
 				avatarUrl
 			}
@@ -47,6 +54,7 @@ export const WRITE_CHAT = gql`
 			id
 			message
 			sender {
+				id
 				nickName
 			}
 			date

@@ -1,5 +1,3 @@
-import { GET_USER } from "./Queries";
-
 export const defaults = {
 	isLoggedIn: false,
 	loginUser: {

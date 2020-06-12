@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 
 import { GET_CHATTING, NEW_CHAT_SUBSCRIPTION } from "../graphqls/Queries";
 import Input from "./Input";
+import SpeachBalloon from "./SpeechBalloon";
 
 let sub = null; //prevent to subscrbe again.
 
@@ -29,13 +30,9 @@ export default () => {
 		return (
 			<div>
 				{data?.chatting?.map((chat) => {
-					return (
-						<h3 key={chat.id}>
-							{chat.sender.nickName} : {chat.message}
-						</h3>
-					);
+					return <SpeachBalloon key={chat.id} chat={chat} side={chat.sender.id === data.loginUser.id ? "right" : "left"} />;
 				})}
-				<Input />
+				<Input id={data.loginUser.id} />
 			</div>
 		);
 	}

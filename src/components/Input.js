@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { WRITE_CHAT } from "../graphqls/Queries";
 
-export default () => {
+export default ({ id }) => {
 	const [msg, setMsg] = useState("");
-
 	const [sendMsg] = useMutation(WRITE_CHAT, {
 		variables: {
-			senderId: 1,
+			senderId: parseInt(id),
 			message: msg,
 		},
 	});
@@ -24,13 +23,15 @@ export default () => {
 					if (e.key === "Enter") {
 						sendMsg();
 						setMsg("");
+						e.target.focus();
 					}
 				}}
 			/>
 			<button
-				onClick={() => {
+				onClick={(e) => {
 					sendMsg();
 					setMsg("");
+					e.target.focus();
 				}}>
 				Send
 			</button>

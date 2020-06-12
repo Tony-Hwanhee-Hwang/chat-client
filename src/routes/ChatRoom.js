@@ -1,7 +1,15 @@
 import React from "react";
 import ChatWindow from "../components/ChatWindow";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_USER } from "../graphqls/Queries";
 
-const ChatRoom = () => {
+const ChatRoom = ({ history }) => {
+	useQuery(GET_USER, {
+		onCompleted: ({ isLoggedIn }) => {
+			if (!isLoggedIn) history.push("/MakeUser");
+		},
+	});
+
 	return (
 		<>
 			<ChatWindow />
