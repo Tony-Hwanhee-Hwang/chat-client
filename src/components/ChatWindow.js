@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-
 import { GET_CHATTING, NEW_CHAT_SUBSCRIPTION } from "../graphqls/Queries";
+
+import { Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Input from "./Input";
 import SpeachBalloon from "./SpeechBalloon";
 
-let sub = null; //prevent to subscrbe again.
+const useStyles = makeStyles((theme) => ({
+	paper: {
+		paddingBottom: 50 + theme.spacing(2),
+	},
+}));
 
 export default () => {
+	const classes = useStyles();
 	const { loading, data, subscribeToMore } = useQuery(GET_CHATTING);
-	if (!sub) {
-		sub = subscribeToMore({
+
+	useEffect(() => {
+		subscribeToMore({
 			document: NEW_CHAT_SUBSCRIPTION,
 			updateQuery: (prev, { subscriptionData }) => {
 				if (!subscriptionData.data) return prev;
@@ -23,15 +31,22 @@ export default () => {
 				};
 			},
 		});
-	}
+	}, []);
+
+	useEffect(() => {
+		document.body.scrollIntoView(false);
+	});
+
 	if (loading) {
 		return "Loading...";
 	} else {
 		return (
 			<div>
-				{data?.chatting?.map((chat) => {
-					return <SpeachBalloon key={chat.id} chat={chat} side={chat.sender.id === data.loginUser.id ? "right" : "left"} />;
-				})}
+				<Paper className={classes.paper}>
+					{data?.chatting?.map((chat) => {
+						return <SpeachBalloon key={chat.id} chat={chat} side={chat.sender.id === data.loginUser.id ? "right" : "left"} />;
+					})}
+				</Paper>
 				<Input id={data.loginUser.id} />
 			</div>
 		);

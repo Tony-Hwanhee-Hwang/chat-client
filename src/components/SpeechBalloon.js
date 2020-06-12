@@ -12,18 +12,18 @@ const useStyles = makeStyles((theme) => ({
 		borderTopRightRadius: theme.spacing(2.5),
 		borderBottomRightRadius: theme.spacing(2.5),
 		borderBottomLeftRadius: theme.spacing(2.5),
-		backgroundColor: theme.palette.grey[100],
+		backgroundColor: theme.palette.info.light,
+		color: theme.palette.common.white,
 	},
 	rightRow: {
 		borderTopLeftRadius: theme.spacing(2.5),
 		borderBottomRightRadius: theme.spacing(2.5),
 		borderBottomLeftRadius: theme.spacing(2.5),
-		backgroundColor: theme.palette.primary.main,
+		backgroundColor: theme.palette.primary.light,
 		color: theme.palette.common.white,
 	},
 	msg: {
 		padding: theme.spacing(1, 2),
-		borderRadius: 4,
 		marginBottom: 4,
 		display: "inline-block",
 		wordBreak: "break-word",
@@ -51,9 +51,9 @@ export default ({ chat, side }) => {
 
 	return (
 		<>
-			<Grid container spacing={2} justify={side === "right" ? "flex-end" : "flex-start"} className={classes.root}>
+			<Grid container justify={side === "right" ? "flex-end" : "flex-start"} className={classes.root}>
 				{side !== "right" && (
-					<Grid item>
+					<Grid item className={classes.root}>
 						<Avatar src={chat.sender.avatarUrl}></Avatar>
 					</Grid>
 				)}
